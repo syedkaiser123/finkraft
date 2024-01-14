@@ -1,0 +1,43 @@
+version: '3'
+
+services:
+  # Django API Service
+  web:
+    build: .
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres
+      - mongodb
+    environment:
+      - DJANGO_DB_HOST=postgres
+      - DJANGO_DB_PORT=5432
+      - DJANGO_DB_NAME=test_userdb_3
+      - DJANGO_DB_USER=syed
+      - DJANGO_DB_PASSWORD=Test@123
+      - DJANGO_SECRET_KEY=django-insecure-qrvhtb*y@=whb4#wz@i+f=k-@q!t2iljd8bgr059(lfq)e-db$
+      - DJANGO_DEBUG=True
+
+  # PostgreSQL Database
+  postgres:
+    build:
+      context: .
+      dockerfile: Dockerfile.postgres
+    environment:
+      POSTGRES_DB: test_userdb_3
+      POSTGRES_USER: syed
+      POSTGRES_PASSWORD: Test@123
+    ports:
+      - "5432:5432"
+
+  # MongoDB Database
+  mongodb:
+    build:
+      context: .
+      dockerfile: Dockerfile.mongodb
+    environment:
+      MONGO_INITDB_DATABASE: test_db_1
+      MONGO_INITDB_ROOT_USERNAME: syed
+      MONGO_INITDB_ROOT_PASSWORD: Test@123
+    ports:
+      - "27017:27017"
